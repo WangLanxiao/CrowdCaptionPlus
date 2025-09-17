@@ -1,0 +1,48 @@
+_BASE_: "./jmdc.yaml"
+OUTPUT_DIR : "work_dirs/baseline_xlan_V1_RL"
+###################################### DATALOADER ######################################
+DATALOADER:
+  TRAIN_BATCH_SIZE: 8 # 5 x 4gpu = 20
+  TEST_BATCH_SIZE: 32
+
+######################################### Engine #########################################
+ENGINE:
+  NAME: 'RLTrainer'
+
+######################################### Scheduled sampling #########################################
+SCHEDULED_SAMPLING:
+  START_EPOCH: 6
+  INC_EVERY_EPOCH: 5
+  INC_PROB: 0.05
+  MAX_PROB: 0.5
+
+MODEL:
+  GIVENBGT: True
+####################################### Optimizer #######################################
+SOLVER:
+  NAME: 'Adam'
+  EPOCH: 50
+  CHECKPOINT_PERIOD: 1
+  EVAL_PERIOD: 1
+  BASE_LR: 0.00001
+  BIAS_LR_FACTOR: 1.0
+  WEIGHT_DECAY: 0.0
+  WEIGHT_DECAY_NORM: 0.0
+  WEIGHT_DECAY_BIAS: 0.0
+  MOMENTUM: 0.9
+  DAMPENING: 0.0
+  NESTEROV: 0.0
+  BETAS: [0.9, 0.999]
+  EPS: 1.0e-8
+  GRAD_CLIP: 0.1
+  GRAD_CLIP_TYPE: 'value'
+  NORM_TYPE: 2.0
+  
+####################################### lr scheduler ####################################### 
+LR_SCHEDULER:
+  NAME: 'StepLR'
+  STEP_SIZE: 10
+  GAMMA: 0.8
+
+LOSSES:
+  NAMES: ['JMDCCrossEntropyRL']
